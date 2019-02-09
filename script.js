@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     var mainDiv = $("#main")[0];
 
-    $.get("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-05-30&camera=navcam&api_key=" + APIKey, function (data) {
+    $.get("https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2016-05-30&camera=navcam&api_key=" + APIKey, function (data) {
         updateDisplay(data.photos[0]);
         // TODO: Handle case when no images
     });
@@ -18,8 +18,19 @@ $(document).ready(function () {
                 { "class": "info" },
                 React.createElement(
                     "span",
+                    { id: "rover" },
+                    "Rover: " + data.rover.name + " (" + data.rover.status + ")"
+                ),
+                React.createElement(
+                    "span",
                     { id: "capture-date" },
-                    data.earth_date
+                    "Date captured: " + data.earth_date + " (sol: " + data.sol + ")"
+                ),
+                React.createElement(
+                    "span",
+                    { id: "camera" },
+                    "Camera: " + data.camera.full_name,
+                    " "
                 )
             )
         );

@@ -4,7 +4,7 @@ $(document).ready(() => {
 
     const mainDiv = $("#main")[0];
 
-    $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-05-30&camera=navcam&api_key=${APIKey}`, (data) => {
+    $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2016-05-30&camera=navcam&api_key=${APIKey}`, (data) => {
         updateDisplay(data.photos[0]);
         // TODO: Handle case when no images
     });
@@ -13,7 +13,9 @@ $(document).ready(() => {
         const element = (
             <div class="container" style={{backgroundImage: "url(" + data.img_src + ")"}}>
                 <div class="info">
-                    <span id="capture-date">{data.earth_date}</span>
+                    <span id="rover">{"Rover: " + data.rover.name + " (" + data.rover.status + ")"}</span>
+                    <span id="capture-date">{"Date captured: " + data.earth_date + " (sol: " + data.sol + ")"}</span>
+                    <span id="camera">{"Camera: " + data.camera.full_name} </span>
                 </div>
             </div>
         );
