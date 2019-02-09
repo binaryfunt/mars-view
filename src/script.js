@@ -5,14 +5,17 @@ $(document).ready(() => {
     const mainDiv = $("#main")[0];
 
     $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2019-1-1&camera=navcam&api_key=${APIKey}`, (data) => {
-        updateDisplay(data.photos[0].img_src);
+        updateDisplay(data.photos[0]);
         // TODO: Handle case when no images
     });
 
-    function updateDisplay(img_src) {
+    function updateDisplay(data) {
         const element = (
-            <div>
-                <img src={img_src} />
+            <div class="container">
+                <img src={data.img_src} />
+                <div class="info">
+                    <span id="capture-date">{data.earth_date}</span>
+                </div>
             </div>
         );
         ReactDOM.render(element, mainDiv);
