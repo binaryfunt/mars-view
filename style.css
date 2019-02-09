@@ -72,5 +72,22 @@ body {
 }
 
 #main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 
+.container {
+  height: 90vh;
+  width: 90vw;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+
+.info {
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.6);
 }
