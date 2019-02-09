@@ -9,8 +9,9 @@ $(document).ready(() => {
         // TODO: Handle case when no images
     });
 
-    function updateDisplay(data) {
-        const element = (
+    function MarsImage(props) {
+        const data = props.data;
+        return (
             <div class="container" style={{backgroundImage: "url(" + data.img_src + ")"}}>
                 <div class="info">
                     <span id="rover">{"Rover: " + data.rover.name + " (" + data.rover.status + ")"}</span>
@@ -19,6 +20,12 @@ $(document).ready(() => {
                 </div>
             </div>
         );
-        ReactDOM.render(element, mainDiv);
+    }
+
+    function updateDisplay(data) {
+        ReactDOM.render(
+            <MarsImage data={data} />,
+            mainDiv
+        );
     }
 });

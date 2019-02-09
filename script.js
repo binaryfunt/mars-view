@@ -9,8 +9,9 @@ $(document).ready(function () {
         // TODO: Handle case when no images
     });
 
-    function updateDisplay(data) {
-        var element = React.createElement(
+    function MarsImage(props) {
+        var data = props.data;
+        return React.createElement(
             "div",
             { "class": "container", style: { backgroundImage: "url(" + data.img_src + ")" } },
             React.createElement(
@@ -34,6 +35,9 @@ $(document).ready(function () {
                 )
             )
         );
-        ReactDOM.render(element, mainDiv);
+    }
+
+    function updateDisplay(data) {
+        ReactDOM.render(React.createElement(MarsImage, { data: data }), mainDiv);
     }
 });
