@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Barlow:300,400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
 /* ------- Defaults ------- */
 
@@ -68,5 +68,9 @@ body {
   width: 100%;
   background: #202020;
   color: #FFF;
-  font-family: Barlow, "Helvetica Neue", "Arial Nova", "Segoe UI", Roboto, Helvetica, Arial, FreeSans, sans-serif;
+  font-family: "Roboto Mono", Consolas, monspace;
+}
+
+#main {
+
 }
