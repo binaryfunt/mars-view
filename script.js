@@ -11,9 +11,13 @@ function wait(delay) {
 $(document).ready(() => {
 
     const mainDiv = $("#main")[0];
+    let photos;
+    let currentSlide = 0;
+    let imageBuffer;
 
     $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2016-05-30&camera=navcam&api_key=${APIKey}`, (data) => {
-        setData(data.photos[0]);
+        photos = data.photos;
+        setData(photos[currentSlide]);
         // TODO: Handle case when no images
     });
 
@@ -40,24 +44,16 @@ $(document).ready(() => {
         slide.date = data.earth_date;
         slide.sol = data.sol;
         slide.cameraFullName = data.camera.full_name;
+
+        currentSlide++;
     }
 
     function advanceSlide() {
         slideTransitionOut().then(() => {
-            setData({
-              "id": 424905,
-              "sol": 1000,
-              "camera": {
-                "full_name": "Mast Camera"
-              },
-              "img_src": "http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000MR0044631300503690E01_DXXX.jpg",
-              "earth_date": "2015-05-30",
-              "rover": {
-                "name": "Curiosity",
-                "status": "active",
-              }
+            setData(photos[currentSlide]);
+            slideTransitionIn().then(() => {
+                preloadImage(photos[currentSlide].img_src);
             });
-            slideTransitionIn();
         });
     }
 
@@ -71,5 +67,10 @@ $(document).ready(() => {
         $("#info").css("transform", "none");
         $("#container").css("opacity", 1);
         await wait(transitionDurMilSec);
+    }
+
+    function preloadImage(url) {
+        imageBuffer = new Image();
+        imageBuffer.src = url;
     }
 });
