@@ -10,13 +10,19 @@ function wait(delay) {
 function getISOString(date) {
     return date.toISOString().split('T')[0];
 }
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
 $(document).ready(() => {
 
     const mainDiv = $("#main")[0];
 
     const slideState = {
-        date: new Date(2017, 4, 30),
+        date: new Date(2014, 4, 30),
         photos: [],
         currentSlide: 0,
         imageBuffer: '',
@@ -37,10 +43,19 @@ $(document).ready(() => {
         beforeCreate: function() {
             fetchJSON(slideState.date);
         },
-        mounted : function() {
-            slideState.advanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
+        mounted : startSlideshow,
+        methods: {
+            toggleSlideshow: function() {
+                if (slideState.advanceIntervalID) {
+                    pauseSlideshow();
+                } else {
+                    startSlideshow();
+                }
+            }
         }
     });
+
+
 
     function setData(data) {
         slide.imgSrc = data .img_src;
@@ -52,7 +67,7 @@ $(document).ready(() => {
 
         slideState.currentSlide += 4;
         if (slideState.currentSlide >= slideState.photos.length) {
-            clearInterval(slideState.advanceIntervalID);
+            pauseSlideshow();
         }
     }
 
@@ -68,6 +83,7 @@ $(document).ready(() => {
         $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${dateString}&api_key=${APIKey}`, (data) => {
             if (data.photos.length > 0) {
                 slideState.photos = data.photos;
+                shuffleArray(slideState.photos);
                 setData(slideState.photos[slideState.currentSlide]);
                 console.log("Photos length: " + slideState.photos.length);
                 preloadImage();
@@ -86,6 +102,14 @@ $(document).ready(() => {
         $("#info").css("transform", "none");
         $("#container").css("opacity", 1);
         await wait(transitionDurMilSec);
+    }
+
+    function startSlideshow() {
+        slideState.advanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
+    }
+    function pauseSlideshow() {
+        clearInterval(slideState.advanceIntervalID);
+        slideState.advanceIntervalID = null;
     }
 
     function preloadImage() {
