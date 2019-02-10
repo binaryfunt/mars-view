@@ -43,7 +43,7 @@ $(document).ready(() => {
     }
 
     function advanceSlide() {
-        slideOffBottom("#info").then(() => {
+        slideTransitionOut().then(() => {
             setData({
               "id": 424905,
               "sol": 1000,
@@ -57,12 +57,19 @@ $(document).ready(() => {
                 "status": "active",
               }
             });
+            slideTransitionIn();
         });
     }
 
 
-    async function slideOffBottom(jQuerySelector) {
-        $(jQuerySelector).css("transform", "translateY(100%)");
+    async function slideTransitionOut() {
+        $("#info").css("transform", "translateY(100%)");
+        $("#container").css("opacity", 0);
+        await wait(transitionDurMilSec);
+    }
+    async function slideTransitionIn() {
+        $("#info").css("transform", "none");
+        $("#container").css("opacity", 1);
         await wait(transitionDurMilSec);
     }
 });
