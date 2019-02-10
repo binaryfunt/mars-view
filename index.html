@@ -8,8 +8,9 @@
     <meta name="description" content="NASA Mars rover imagery">
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
     <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -18,9 +19,13 @@
   <body>
 
     <div id="main">
-      <!-- <div class="wrapper">
-
-      </div> -->
+      <div id="container" v-bind:style="{backgroundImage: `url(${imgSrc})`}">
+        <div id="info" v-bind:style="{transition: `${slideTransitionDuration}s transform`}">
+          <span id="rover">Rover: {{roverName}} ({{roverStatus}})</span>
+          <span id="capture-date">Date captured: {{date}} (sol: {{sol}})</span>
+          <span id="camera">Camera: {{cameraFullName}}</span>
+        </div>
+      </div>
     </div>
 
   </body>
