@@ -1,6 +1,7 @@
 const APIKey = 'Y5iGrr42MbNPB7CZYUkkwz9uaSLzDaRecvoOXCb9';
 
-const slideAdvanceDelay = 5000;
+const slideAdvanceDelaySec = 10;
+const slideAdvanceDelayMilSec = slideAdvanceDelaySec * 1000;
 const transitionDurSec = 1;
 const transitionDurMilSec = transitionDurSec * 1000;
 
@@ -38,7 +39,8 @@ $(document).ready(() => {
             date: '',
             sol: '',
             cameraFullName: '',
-            transitionDurSec: transitionDurSec
+            transitionDurSec: transitionDurSec,
+            slideAdvanceDelaySec: slideAdvanceDelaySec
         },
         beforeCreate: function() {
             fetchJSON(slideState.date);
@@ -105,7 +107,7 @@ $(document).ready(() => {
     }
 
     function startSlideshow() {
-        slideState.advanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
+        slideState.advanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelayMilSec);
     }
     function pauseSlideshow() {
         clearInterval(slideState.advanceIntervalID);
