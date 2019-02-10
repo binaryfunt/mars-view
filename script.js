@@ -15,12 +15,13 @@ $(document).ready(() => {
 
     const mainDiv = $("#main")[0];
 
-    let photos;
-    let currentSlide = 0;
-    let imageBuffer;
-    let slideAdvanceIntervalID;
-
-
+    const slideState = {
+        date: new Date(2017, 4, 30),
+        photos: [],
+        currentSlide: 0,
+        imageBuffer: '',
+        advanceIntervalID: null
+    }
 
     const slide = new Vue({
         el: '#container',
@@ -34,10 +35,10 @@ $(document).ready(() => {
             transitionDurSec: transitionDurSec
         },
         beforeCreate: function() {
-            fetchJSON(new Date(2015, 8, 1));
+            fetchJSON(slideState.date);
         },
         mounted : function() {
-            slideAdvanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
+            slideState.advanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
         }
     });
 
@@ -49,28 +50,30 @@ $(document).ready(() => {
         slide.sol = data.sol;
         slide.cameraFullName = data.camera.full_name;
 
-        currentSlide += 4;
-        if (currentSlide >= photos.length) {
-            clearInterval(slideAdvanceIntervalID);
+        slideState.currentSlide += 4;
+        if (slideState.currentSlide >= slideState.photos.length) {
+            clearInterval(slideState.advanceIntervalID);
         }
     }
 
     function advanceSlide() {
         slideTransitionOut().then(() => {
-            setData(photos[currentSlide]);
-            slideTransitionIn().then(() => {
-                preloadImage(photos[currentSlide].img_src);
-            });
+            setData(slideState.photos[slideState.currentSlide]);
+            slideTransitionIn().then(preloadImage);
         });
     }
 
     function fetchJSON(date) {
         dateString = getISOString(date);
         $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${dateString}&api_key=${APIKey}`, (data) => {
-            photos = data.photos;
-            setData(photos[currentSlide]);
-            console.log(photos.length);
-            // TODO: Handle case when no images
+            if (data.photos.length > 0) {
+                slideState.photos = data.photos;
+                setData(slideState.photos[slideState.currentSlide]);
+                console.log("Photos length: " + slideState.photos.length);
+                preloadImage();
+            } else {
+                console.log("No images for selected date");
+            }
         });
     }
 
@@ -85,8 +88,8 @@ $(document).ready(() => {
         await wait(transitionDurMilSec);
     }
 
-    function preloadImage(url) {
-        imageBuffer = new Image();
-        imageBuffer.src = url;
+    function preloadImage() {
+        slideState.imageBuffer = new Image();
+        slideState.imageBuffer.src = slideState.photos[slideState.currentSlide].img_src;
     }
 });
