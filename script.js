@@ -14,10 +14,12 @@ $(document).ready(() => {
     let photos;
     let currentSlide = 0;
     let imageBuffer;
+    let slideAdvanceIntervalID;
 
     $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2016-05-30&camera=navcam&api_key=${APIKey}`, (data) => {
         photos = data.photos;
         setData(photos[currentSlide]);
+        console.log(photos.length);
         // TODO: Handle case when no images
     });
 
@@ -33,7 +35,7 @@ $(document).ready(() => {
             transitionDurSec: transitionDurSec
         },
         mounted : function() {
-            window.setTimeout(advanceSlide, slideAdvanceDelay);
+            slideAdvanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
         }
     });
 
@@ -45,7 +47,10 @@ $(document).ready(() => {
         slide.sol = data.sol;
         slide.cameraFullName = data.camera.full_name;
 
-        currentSlide++;
+        currentSlide += 4;
+        if (currentSlide >= photos.length) {
+            clearInterval(slideAdvanceIntervalID);
+        }
     }
 
     function advanceSlide() {
