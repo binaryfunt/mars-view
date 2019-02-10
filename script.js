@@ -7,21 +7,20 @@ const transitionDurMilSec = transitionDurSec * 1000;
 function wait(delay) {
     return new Promise(resolve => setTimeout(resolve, delay));
 }
+function getISOString(date) {
+    return date.toISOString().split('T')[0];
+}
 
 $(document).ready(() => {
 
     const mainDiv = $("#main")[0];
+
     let photos;
     let currentSlide = 0;
     let imageBuffer;
     let slideAdvanceIntervalID;
 
-    $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2016-05-30&camera=navcam&api_key=${APIKey}`, (data) => {
-        photos = data.photos;
-        setData(photos[currentSlide]);
-        console.log(photos.length);
-        // TODO: Handle case when no images
-    });
+
 
     const slide = new Vue({
         el: '#container',
@@ -33,6 +32,9 @@ $(document).ready(() => {
             sol: '',
             cameraFullName: '',
             transitionDurSec: transitionDurSec
+        },
+        beforeCreate: function() {
+            fetchJSON(new Date(2015, 8, 1));
         },
         mounted : function() {
             slideAdvanceIntervalID = window.setInterval(advanceSlide, slideAdvanceDelay);
@@ -62,6 +64,15 @@ $(document).ready(() => {
         });
     }
 
+    function fetchJSON(date) {
+        dateString = getISOString(date);
+        $.get(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${dateString}&api_key=${APIKey}`, (data) => {
+            photos = data.photos;
+            setData(photos[currentSlide]);
+            console.log(photos.length);
+            // TODO: Handle case when no images
+        });
+    }
 
     async function slideTransitionOut() {
         $("#info").css("transform", "translateY(100%)");
