@@ -20,7 +20,7 @@
 
     <div id="main">
       <div id="container" v-bind:style="{backgroundImage: `url(${imgSrc})`}">
-        <div id="info" v-bind:style="{transition: `${slideTransitionDuration}s transform`}">
+        <div id="info" v-bind:style="{transition: `${transitionDurSec}s transform`}">
           <span id="rover">Rover: {{roverName}} ({{roverStatus}})</span>
           <span id="capture-date">Date captured: {{date}} (sol: {{sol}})</span>
           <span id="camera">Camera: {{cameraFullName}}</span>
