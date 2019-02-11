@@ -76,7 +76,10 @@ $(document).ready(() => {
     function advanceSlide() {
         slideTransitionOut().then(() => {
             setData(slideState.photos[slideState.currentSlide]);
-            slideTransitionIn().then(preloadImage);
+            slideTransitionIn().then(() => {
+                animateBackground();
+                preloadImage();
+            });
         });
     }
 
@@ -97,13 +100,20 @@ $(document).ready(() => {
 
     async function slideTransitionOut() {
         $("#info").css("transform", "translateY(100%)");
-        $("#container").css("opacity", 0);
+        $("#container").addClass("hiding");
         await wait(transitionDurMilSec);
+        $("#container").addClass("hidden");
+        $("#container").removeClass("hiding");
+        $("#container").css("background-position-y", "100%");
+        await wait(100);
     }
     async function slideTransitionIn() {
         $("#info").css("transform", "none");
-        $("#container").css("opacity", 1);
+        $("#container").removeClass("hidden");
         await wait(transitionDurMilSec);
+    }
+    function animateBackground() {
+        $("#container").css("background-position-y", "0%");
     }
 
     function startSlideshow() {
