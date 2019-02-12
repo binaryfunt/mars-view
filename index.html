@@ -19,13 +19,35 @@
   <body>
 
     <div id="main">
-      <div id="container" v-bind:style="{backgroundImage: `url(${imgSrc})`, transition: `opacity ${transitionDurSec}s, background-position ${slideAdvanceDelaySec}s`}" v-on:click="toggleSlideshow">
-        <div id="info" v-bind:style="{transition: `transform, ${transitionDurSec}s`}">
+
+      <div id="container"
+        v-bind:style="{
+          backgroundImage: `url(${imgSrc})`,
+          transition: `opacity ${transitionDurSec}s, background-position ${slideAdvanceDelaySec}s`
+        }"
+        v-bind:class="{
+          hiding: isContainerHiding,
+          hidden: isContainerHidden,
+          animating: isContainerAnimating
+        }"
+        v-on:click="toggleSlideshow">
+
+        <div id="info"
+          v-bind:style="{
+            transition: `transform, ${transitionDurSec}s`
+          }"
+          v-bind:class="{
+            off: isInfoOff
+          }">
+
           <span id="rover">Rover: {{roverName}} ({{roverStatus}})</span>
           <span id="capture-date">Date captured: {{date}} (sol: {{sol}})</span>
           <span id="camera">Camera: {{cameraFullName}}</span>
+
         </div>
+
       </div>
+
     </div>
 
   </body>

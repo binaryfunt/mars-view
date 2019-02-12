@@ -20,8 +20,6 @@ function shuffleArray(array) {
 
 $(document).ready(() => {
 
-    const mainDiv = $("#main")[0];
-
     const slideState = {
         date: new Date(2014, 4, 30),
         photos: [],
@@ -40,7 +38,11 @@ $(document).ready(() => {
             sol: '',
             cameraFullName: '',
             transitionDurSec: transitionDurSec,
-            slideAdvanceDelaySec: slideAdvanceDelaySec
+            slideAdvanceDelaySec: slideAdvanceDelaySec,
+            isContainerHiding: false,
+            isContainerHidden: false,
+            isContainerAnimating: false,
+            isInfoOff: false
         },
         beforeCreate: function() {
             fetchJSON(slideState.date);
@@ -60,14 +62,14 @@ $(document).ready(() => {
 
 
     function setData(data) {
-        slide.imgSrc = data .img_src;
+        slide.imgSrc = data.img_src;
         slide.roverName = data.rover.name;
         slide.roverStatus = data.rover.status;
         slide.date = data.earth_date;
         slide.sol = data.sol;
         slide.cameraFullName = data.camera.full_name;
 
-        slideState.currentSlide += 4;
+        slideState.currentSlide++;
         if (slideState.currentSlide >= slideState.photos.length) {
             pauseSlideshow();
         }
@@ -99,21 +101,21 @@ $(document).ready(() => {
     }
 
     async function slideTransitionOut() {
-        $("#info").css("transform", "translateY(100%)");
-        $("#container").addClass("hiding");
+        slide.isInfoOff = true;
+        slide.isContainerHiding = true;
         await wait(transitionDurMilSec);
-        $("#container").addClass("hidden");
-        $("#container").removeClass("hiding");
-        $("#container").css("background-position-y", "100%");
+        slide.isContainerHidden = true;
+        slide.isContainerHiding = false;
+        slide.isContainerAnimating = false;
         await wait(100);
     }
     async function slideTransitionIn() {
-        $("#info").css("transform", "none");
-        $("#container").removeClass("hidden");
+        slide.isInfoOff = false;
+        slide.isContainerHidden = false;
         await wait(transitionDurMilSec);
     }
     function animateBackground() {
-        $("#container").css("background-position-y", "0%");
+        slide.isContainerAnimating = true;
     }
 
     function startSlideshow() {

@@ -96,11 +96,18 @@ body {
   opacity: 0;
   transition: background-position-y 0s !important;
 }
+#container.animating {
+  background-position-y: 0%;
+}
 
 #info {
   width: 100%;
   padding: 7px 0;
   background: rgba(0,0,0,0.6);
+  transform: none;
+}
+#info.off {
+  transform: translateY(100%);
 }
 
 #info span {
